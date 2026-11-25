@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>ClipFlow — TikTok Video Upload</title>
+<style>
+:root{--ink:#17191d;--muted:#777d87;--line:#e8eaee;--soft:#f7f8fa;--accent:#17191d;--green:#16865b}
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100% - 1080px)/2))}
+.brand{font-size:20px;font-weight:800;letter-spacing:-.8px}.brand span{color:#8b9099}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:#23a36d}
+main{max-width:900px;margin:0 auto;padding:54px 22px 70px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;color:#8a9099;text-transform:uppercase}
+h1{font-size:clamp(30px,5vw,46px);letter-spacing:-1.8px;line-height:1.12;margin:12px 0 12px}.lead{color:var(--muted);line-height:1.7;margin:0 0 32px;font-size:15px}
+.panel{border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff;box-shadow:0 8px 30px #17191d08}
+.drop{border:1.5px dashed #d7dbe1;border-radius:14px;background:#fbfcfd;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;transition:.18s}
+.drop.drag{border-color:#555;background:#f4f5f6}.upload-icon{width:48px;height:48px;border-radius:14px;background:#f0f2f4;display:grid;place-items:center;font-size:23px;margin-bottom:15px}
+.drop strong{font-size:16px}.drop p{font-size:13px;color:var(--muted);margin:8px 0 18px}
+button,.file-label{border:0;border-radius:10px;background:var(--ink);color:#fff;padding:12px 18px;font-weight:650;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#f0f2f4;color:#25282d}.file-input{display:none}
+.hint{font-size:11px;color:#9298a1;margin-top:13px}
+.file-card{display:none;margin-top:18px;border:1px solid var(--line);border-radius:13px;padding:16px;gap:14px;align-items:center}
+.thumb{width:78px;height:104px;background:#f0f2f4;border-radius:8px;object-fit:cover;flex:none}
+.file-meta{min-width:0;flex:1}.filename{font-size:14px;font-weight:700;overflow-wrap:anywhere}.sub{font-size:12px;color:var(--muted);margin-top:6px}
+.remove{background:#f3f4f6;color:#555;padding:8px 10px}
+.details{display:none;margin-top:22px}.section-title{font-size:14px;font-weight:750;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:var(--soft);padding:14px;border-radius:11px}.metric small{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.metric strong{font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.actions button{flex:1;min-width:180px}
+.notice{font-size:12px;color:#666d77;line-height:1.65;background:#f7f8fa;border-radius:10px;padding:13px 15px;margin-top:18px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}.step{border-top:1px solid var(--line);padding-top:14px}.step b{font-size:12px}.step p{font-size:12px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+footer{border-top:1px solid var(--line);padding:22px;text-align:center;color:#9aa0a8;font-size:11px}
+#message{font-size:12px;color:var(--green);margin-top:12px;min-height:18px}
+@media(max-width:600px){main{padding-top:38px}.panel{padding:14px}.drop{min-height:200px}.grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr;gap:10px}.file-card{align-items:flex-start}.thumb{width:62px;height:84px}.status{font-size:10px}}
+</style>
+</head>
+<body>
+<header><div class="brand">clipflow<span>.</span></div><div class="status"><i class="dot"></i> Local file mode</div></header>
+<main>
+ <div class="eyebrow">TIKTOK VIDEO WORKSPACE</div>
+ <h1>Upload your video.<br>Keep it original.</h1>
+ <p class="lead">動画を選択して、投稿前にファイル情報をチェック。元の動画データをそのまま保存できる、シンプルなアップロード準備ツールです。</p>
+ <section class="panel">
+  <div class="drop" id="drop">
+   <div class="upload-icon">↑</div>
+   <strong>動画をここにドラッグ＆ドロップ</strong>
+   <p>または、デバイスから動画ファイルを選択</p>
+   <label class="file-label" for="file">動画を選択する</label>
+   <input class="file-input" id="file" type="file" accept="video/*">
+   <div class="hint">MP4 / MOV / WebM などの動画ファイル</div>
+  </div>
+  <div class="file-card" id="fileCard">
+   <video class="thumb" id="thumb" controls playsinline></video>
+   <div class="file-meta"><div class="filename" id="filename"></div><div class="sub" id="filesub"></div></div>
+   <button class="remove" id="remove" type="button">削除</button>
+  </div>
+  <div class="details" id="details">
+   <h2 class="section-title">動画ファイル情報</h2>
+   <div class="grid">
+    <div class="metric"><small>解像度</small><strong id="resolution">—</strong></div>
+    <div class="metric"><small>長さ</small><strong id="duration">—</strong></div>
+    <div class="metric"><small>ファイルサイズ</small><strong id="size">—</strong></div>
+    <div class="metric"><small>形式</small><strong id="format">—</strong></div>
+    <div class="metric"><small>アスペクト比</small><strong id="ratio">—</strong></div>
+    <div class="metric"><small>状態</small><strong id="state">確認済み</strong></div>
+   </div>
+   <div class="notice">このページは動画をサーバーへ送信せず、ブラウザ内で情報を確認します。「元動画を保存」を押すと、選択したファイルを再エンコードせずに保存できます。TikTok側では投稿時に再圧縮される場合があり、画質の完全な維持は保証できません。</div>
+   <div class="actions">
+    <button id="save" type="button">↓ 元動画を保存</button>
+    <button class="secondary" id="change" type="button">別の動画を選ぶ</button>
+   </div>
+   <div id="message" aria-live="polite"></div>
+  </div>
+ </section>
+ <div class="steps">
+  <div class="step"><b>01 — SELECT</b><p>投稿したい動画ファイルを選択します。</p></div>
+  <div class="step"><b>02 — CHECK</b><p>解像度・長さ・ファイル形式などを確認します。</p></div>
+  <div class="step"><b>03 — SAVE</b><p>元データを変換せずに端末へ保存します。</p></div>
+ </div>
+</main>
+<footer>clipflow. &nbsp;·&nbsp; Your video stays on your device</footer>
+<script>
+const input=document.getElementById('file'),drop=document.getElementById('drop'),card=document.getElementById('fileCard'),details=document.getElementById('details'),video=document.getElementById('thumb');
+let currentFile=null,objectUrl=null;
+const fmtBytes=n=>n<1024*1024?(n/1024).toFixed(1)+' KB':(n/1024/1024).toFixed(2)+' MB';
+const fmtTime=s=>{if(!Number.isFinite(s))return '—';const m=Math.floor(s/60),sec=Math.floor(s%60);return `${m}:${String(sec).padStart(2,'0')}`};
+function loadFile(file){
+ if(!file)return;
+ if(!file.type.startsWith('video/')){alert('動画ファイルを選択してください。');return}
+ currentFile=file;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(file);video.src=objectUrl;
+ document.getElementById('filename').textContent=file.name;
+ document.getElementById('filesub').textContent=fmtBytes(file.size)+' · '+(file.type||'形式不明');
+ card.style.display='flex';drop.style.display='none';details.style.display='block';
+ document.getElementById('size').textContent=fmtBytes(file.size);
+ document.getElementById('format').textContent=(file.type.split('/')[1]||'不明').toUpperCase();
+ document.getElementById('message').textContent='';
+ video.onloadedmetadata=()=>{
+  const w=video.videoWidth,h=video.videoHeight;
+  document.getElementById('resolution').textContent=w+' × '+h;
+  document.getElementById('duration').textContent=fmtTime(video.duration);
+  const gcd=(a,b)=>b?gcd(b,a%b):a;const d=gcd(w,h);
+  document.getElementById('ratio').textContent=(w/d)+':'+(h/d)+(h>w?' · 縦':'');
+  document.getElementById('state').textContent='確認済み';
+ };
+}
+function reset(){currentFile=null;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=null;video.removeAttribute('src');video.load();input.value='';card.style.display='none';details.style.display='none';drop.style.display='flex';}
+input.addEventListener('change',e=>loadFile(e.target.files[0]));
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+document.getElementById('remove').onclick=reset;
+document.getElementById('change').onclick=()=>input.click();
+document.getElementById('save').onclick=()=>{
+ if(!currentFile)return;const a=document.createElement('a');const url=URL.createObjectURL(currentFile);a.href=url;a.download=currentFile.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ document.getElementById('message').textContent='元動画の保存を開始しました。';
+};
+</script>
+</body>
+</html>
