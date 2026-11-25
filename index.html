@@ -4,16 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-<title>ClipFlow — TikTok Video Upload</title>
+<title>GV method — TikTok Video Tools</title>
 <style>
 :root{--ink:#17191d;--muted:#777d87;--line:#e8eaee;--soft:#f7f8fa;--accent:#17191d;--green:#16865b}
-*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100% - 1080px)/2))}
-.brand{font-size:20px;font-weight:800;letter-spacing:-.8px}.brand span{color:#8b9099}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:#23a36d}
-main{max-width:900px;margin:0 auto;padding:54px 22px 70px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;color:#8a9099;text-transform:uppercase}
-h1{font-size:clamp(30px,5vw,46px);letter-spacing:-1.8px;line-height:1.12;margin:12px 0 12px}.lead{color:var(--muted);line-height:1.7;margin:0 0 32px;font-size:15px}
-.panel{border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff;box-shadow:0 8px 30px #17191d08}
-.drop{border:1.5px dashed #d7dbe1;border-radius:14px;background:#fbfcfd;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px;transition:.18s}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100% - 1080px)/2));position:sticky;top:0;background:#ffffffed;backdrop-filter:blur(12px);z-index:5}
+.brand{font-size:21px;font-weight:850;letter-spacing:-.9px}.brand span{color:#8b9099}
+.header-right{display:flex;align-items:center;gap:12px}
+.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:#23a36d}
+.menu-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);font-size:22px;cursor:pointer;display:grid;place-items:center}
+main{max-width:900px;margin:0 auto;padding:48px 22px 70px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;color:#8a9099;text-transform:uppercase}
+h1{font-size:clamp(30px,5vw,46px);letter-spacing:-1.8px;line-height:1.12;margin:12px 0}
+h2{font-size:20px;letter-spacing:-.5px;margin:0 0 12px}
+.lead{color:var(--muted);line-height:1.7;margin:0 0 30px;font-size:15px}
+.panel{border:1px solid var(--line);border-radius:18px;padding:22px;background:#fff;box-shadow:0 8px 30px #17191d08;margin:18px 0}
+.drop{border:1.5px dashed #d7dbe1;border-radius:14px;background:#fbfcfd;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;transition:.18s}
 .drop.drag{border-color:#555;background:#f4f5f6}.upload-icon{width:48px;height:48px;border-radius:14px;background:#f0f2f4;display:grid;place-items:center;font-size:23px;margin-bottom:15px}
 .drop strong{font-size:16px}.drop p{font-size:13px;color:var(--muted);margin:8px 0 18px}
 button,.file-label{border:0;border-radius:10px;background:var(--ink);color:#fff;padding:12px 18px;font-weight:650;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
@@ -25,94 +32,253 @@ button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#f0f2f4;colo
 .remove{background:#f3f4f6;color:#555;padding:8px 10px}
 .details{display:none;margin-top:22px}.section-title{font-size:14px;font-weight:750;margin:0 0 14px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:var(--soft);padding:14px;border-radius:11px}.metric small{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.metric strong{font-size:15px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.actions button{flex:1;min-width:180px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.actions button{flex:1;min-width:160px}
 .notice{font-size:12px;color:#666d77;line-height:1.65;background:#f7f8fa;border-radius:10px;padding:13px 15px;margin-top:18px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}.step{border-top:1px solid var(--line);padding-top:14px}.step b{font-size:12px}.step p{font-size:12px;color:var(--muted);line-height:1.6;margin:7px 0 0}
 footer{border-top:1px solid var(--line);padding:22px;text-align:center;color:#9aa0a8;font-size:11px}
-#message{font-size:12px;color:var(--green);margin-top:12px;min-height:18px}
-@media(max-width:600px){main{padding-top:38px}.panel{padding:14px}.drop{min-height:200px}.grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr;gap:10px}.file-card{align-items:flex-start}.thumb{width:62px;height:84px}.status{font-size:10px}}
+#message,#urlMessage{font-size:12px;color:var(--green);margin-top:12px;min-height:18px}
+.field{width:100%;border:1px solid #dfe2e7;border-radius:10px;padding:14px;font-size:14px;outline:none;color:var(--ink);background:#fff}
+.field:focus{border-color:#777}
+.tool-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tool-card{border:1px solid var(--line);border-radius:14px;padding:18px;text-align:left;background:#fff;color:var(--ink);display:block;width:100%}
+.tool-card strong{display:block;margin:8px 0 5px;font-size:14px}.tool-card span{color:var(--muted);font-size:12px;font-weight:400}
+.page{display:none}.page.active{display:block}
+.menu-backdrop{position:fixed;inset:0;background:#11182755;z-index:9;display:none}
+.drawer{position:fixed;right:0;top:0;height:100dvh;width:min(340px,88vw);background:#fff;z-index:10;padding:22px;box-shadow:-15px 0 45px #0002;transform:translateX(105%);transition:transform .22s ease}
+.drawer.open{transform:translateX(0)}.menu-backdrop.open{display:block}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.nav-label{font-size:10px;letter-spacing:1.5px;color:#9298a1;font-weight:800;margin:18px 8px 8px}
+.nav-item{width:100%;background:#fff;color:var(--ink);justify-content:flex-start;padding:13px 10px;border-radius:10px;font-size:14px}
+.nav-item:hover,.nav-item:focus{background:var(--soft)}
+.url-row{display:flex;gap:9px}.url-row input{flex:1;min-width:0}
+@media(max-width:600px){main{padding:35px 16px 55px}.panel{padding:15px}.drop{min-height:190px}.grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr;gap:10px}.file-card{align-items:flex-start}.thumb{width:62px;height:84px}.status{font-size:10px}.tool-grid{grid-template-columns:1fr}.url-row{flex-direction:column}.url-row button{width:100%}}
 </style>
 </head>
 <body>
-<header><div class="brand">clipflow<span>.</span></div><div class="status"><i class="dot"></i> Local file mode</div></header>
+<header>
+  <div class="brand">GV method<span>.</span></div>
+  <div class="header-right">
+    <div class="status"><i class="dot"></i> Video workspace</div>
+    <button class="menu-btn" id="menuOpen" aria-label="メニューを開く" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="メニュー">
+  <div class="drawer-head"><div class="brand">GV method<span>.</span></div><button class="menu-btn" id="menuClose" aria-label="メニューを閉じる">×</button></div>
+  <div class="nav-label">MAIN</div>
+  <button class="nav-item" data-page="home">⌂　Home</button>
+  <div class="nav-label">VIDEO TOOLS</div>
+  <button class="nav-item" data-page="upload">↑　Video Upload</button>
+  <button class="nav-item" data-page="fps">◷　FPS Analyzer</button>
+  <button class="nav-item" data-page="resolution">▣　Resolution Check</button>
+  <button class="nav-item" data-page="upscale">↗　Pixel Upscaler</button>
+  <div class="nav-label">OTHER</div>
+  <button class="nav-item" data-page="settings">⚙　About / Settings</button>
+</aside>
+
 <main>
- <div class="eyebrow">TIKTOK VIDEO WORKSPACE</div>
- <h1>Upload your video.<br>Keep it original.</h1>
- <p class="lead">動画を選択して、投稿前にファイル情報をチェック。元の動画データをそのまま保存できる、シンプルなアップロード準備ツールです。</p>
- <section class="panel">
-  <div class="drop" id="drop">
-   <div class="upload-icon">↑</div>
-   <strong>動画をここにドラッグ＆ドロップ</strong>
-   <p>または、デバイスから動画ファイルを選択</p>
-   <label class="file-label" for="file">動画を選択する</label>
-   <input class="file-input" id="file" type="file" accept="video/*">
-   <div class="hint">MP4 / MOV / WebM などの動画ファイル</div>
+<section class="page active" id="page-home">
+  <div class="eyebrow">TIKTOK VIDEO WORKSPACE</div>
+  <h1>Make your videos<br>ready to share.</h1>
+  <p class="lead">動画をアップロードして、投稿前にファイル情報を確認。GV methodのツールをここから利用できます。</p>
+  <div class="tool-grid">
+    <button class="tool-card" data-page="upload">↑<strong>Video Upload</strong><span>動画を選択して情報を確認</span></button>
+    <button class="tool-card" data-page="fps">◷<strong>FPS Analyzer</strong><span>TikTok URL・動画のFPS確認</span></button>
+    <button class="tool-card" data-page="resolution">▣<strong>Resolution Check</strong><span>動画の解像度を確認</span></button>
+    <button class="tool-card" data-page="upscale">↗<strong>Pixel Upscaler</strong><span>動画の解像度をアップスケール</span></button>
   </div>
-  <div class="file-card" id="fileCard">
-   <video class="thumb" id="thumb" controls playsinline></video>
-   <div class="file-meta"><div class="filename" id="filename"></div><div class="sub" id="filesub"></div></div>
-   <button class="remove" id="remove" type="button">削除</button>
-  </div>
-  <div class="details" id="details">
-   <h2 class="section-title">動画ファイル情報</h2>
-   <div class="grid">
-    <div class="metric"><small>解像度</small><strong id="resolution">—</strong></div>
-    <div class="metric"><small>長さ</small><strong id="duration">—</strong></div>
-    <div class="metric"><small>ファイルサイズ</small><strong id="size">—</strong></div>
-    <div class="metric"><small>形式</small><strong id="format">—</strong></div>
-    <div class="metric"><small>アスペクト比</small><strong id="ratio">—</strong></div>
-    <div class="metric"><small>状態</small><strong id="state">確認済み</strong></div>
-   </div>
-   <div class="notice">このページは動画をサーバーへ送信せず、ブラウザ内で情報を確認します。「元動画を保存」を押すと、選択したファイルを再エンコードせずに保存できます。TikTok側では投稿時に再圧縮される場合があり、画質の完全な維持は保証できません。</div>
-   <div class="actions">
-    <button id="save" type="button">↓ 元動画を保存</button>
-    <button class="secondary" id="change" type="button">別の動画を選ぶ</button>
-   </div>
-   <div id="message" aria-live="polite"></div>
-  </div>
- </section>
- <div class="steps">
-  <div class="step"><b>01 — SELECT</b><p>投稿したい動画ファイルを選択します。</p></div>
+</section>
+
+<section class="page" id="page-upload">
+  <div class="eyebrow">VIDEO TOOLS / UPLOAD</div><h1>Upload your video.</h1>
+  <p class="lead">動画を選択して、投稿前にファイル情報をチェックできます。</p>
+  <section class="panel">
+    <div class="drop" id="drop">
+      <div class="upload-icon">↑</div><strong>動画をここにドラッグ＆ドロップ</strong>
+      <p>または、デバイスから動画ファイルを選択</p>
+      <label class="file-label" for="file">動画を選択する</label>
+      <input class="file-input" id="file" type="file" accept="video/*">
+      <div class="hint">MP4 / MOV / WebM などの動画ファイル</div>
+    </div>
+    <div class="file-card" id="fileCard">
+      <video class="thumb" id="thumb" controls playsinline></video>
+      <div class="file-meta"><div class="filename" id="filename"></div><div class="sub" id="filesub"></div></div>
+      <button class="remove" id="remove" type="button">削除</button>
+    </div>
+    <div class="details" id="details">
+      <h2 class="section-title">動画ファイル情報</h2>
+      <div class="grid">
+        <div class="metric"><small>解像度</small><strong id="resolution">—</strong></div>
+        <div class="metric"><small>長さ</small><strong id="duration">—</strong></div>
+        <div class="metric"><small>ファイルサイズ</small><strong id="size">—</strong></div>
+        <div class="metric"><small>形式</small><strong id="format">—</strong></div>
+        <div class="metric"><small>アスペクト比</small><strong id="ratio">—</strong></div>
+        <div class="metric"><small>FPS</small><strong id="fps">未取得</strong></div>
+      </div>
+      <div class="notice">解像度・長さなどはブラウザで確認します。標準のブラウザ機能だけでは、動画ファイルに記録された正確なFPSやビットレートを常に取得できるわけではありません。</div>
+      <div class="actions"><button id="save" type="button">↓ 元動画を保存</button><button class="secondary" id="change" type="button">別の動画を選ぶ</button></div>
+      <div id="message" aria-live="polite"></div>
+    </div>
+  </section>
+</section>
+
+<section class="page" id="page-fps">
+  <div class="eyebrow">VIDEO TOOLS / FPS ANALYZER</div><h1>FPS Analyzer.</h1>
+  <p class="lead">TikTok動画のURLを入力できます。動画のFPS情報を取得できない場合は、保存済み動画ファイルを使って確認してください。</p>
+  <section class="panel">
+    <h2>1. TikTok動画URL</h2>
+    <div class="url-row"><input class="field" id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@user/video/..."><button id="checkUrl">URLを確認</button></div>
+    <div id="urlMessage" aria-live="polite"></div>
+    <div class="notice">この静的サイトはTikTokの動画データを直接取得するサーバーを持たないため、URLだけから正確なFPSを判定することはできません。URLの形式確認のみ行い、動画の解析にはファイルを選択してください。</div>
+  </section>
+  <section class="panel">
+    <h2>2. 動画ファイルで確認</h2>
+    <p class="lead" style="margin-bottom:14px">端末に保存した動画をアップロードすると、解像度・長さなどの読み取り可能な情報を表示します。</p>
+    <button data-page="upload">動画アップロードを開く</button>
+    <div class="notice">正確なエンコードFPSを表示するには、動画コンテナのフレーム情報を解析する専用ライブラリまたはサーバー処理が別途必要です。再生中の見た目だけから正確な元FPSとは断定しません。</div>
+  </section>
+</section>
+
+<section class="page" id="page-resolution">
+  <div class="eyebrow">VIDEO TOOLS / RESOLUTION</div><h1>Resolution Check.</h1>
+  <p class="lead">動画をアップロードすると、動画の幅・高さと縦横比を確認できます。</p>
+  <button data-page="upload">動画を選択する</button>
+  <div class="notice">解像度はVideo Uploadページで表示されます。</div>
+</section>
+
+<section class="page" id="page-upscale">
+  <div class="eyebrow">VIDEO TOOLS / PIXEL UPSCALER</div><h1>Pixel Upscaler.</h1>
+  <p class="lead">動画を大きな解像度のキャンバスに拡大して書き出します。AIによるディテール復元ではなく、ピクセル数を増やす通常のアップスケールです。</p>
+  <section class="panel">
+    <h2>1. 動画を選択</h2>
+    <input class="field" id="upFile" type="file" accept="video/*">
+    <div id="upInfo" class="notice">動画ファイルを選択してください。処理はこのブラウザ内で行います。</div>
+  </section>
+  <section class="panel">
+    <h2>2. 出力解像度</h2>
+    <div class="grid">
+      <button class="secondary scale-choice" data-scale="1080">1080p</button>
+      <button class="secondary scale-choice" data-scale="1440">1440p</button>
+      <button class="secondary scale-choice" data-scale="2160">4K</button>
+    </div>
+    <p class="hint">縦動画は縦横比を維持して、長辺を選択したサイズに合わせます。</p>
+    <div id="scaleInfo" class="notice">出力サイズ：未選択</div>
+    <button id="startUpscale" disabled>アップスケールして書き出す</button>
+    <div id="upProgress" class="notice" aria-live="polite">動画を選択すると開始できます。</div>
+    <a id="upDownload" style="display:none;color:#17191d;font-weight:700" download="gv-method-upscaled.webm">処理した動画をダウンロード</a>
+  </section>
+  <div class="notice">注意：拡大処理で解像度の数値は上がりますが、元動画にない細部が本物の情報として復元されるわけではありません。ブラウザや端末によっては高解像度の書き出しに対応しない場合があります。書き出し形式はWebMで、音声は端末・ブラウザが対応する場合のみ含まれます。</div>
+</section>
+
+<section class="page" id="page-settings">
+  <div class="eyebrow">GV METHOD / ABOUT</div><h1>About GV method.</h1>
+  <p class="lead">動画の投稿準備とファイル情報確認のためのシンプルなワークスペースです。</p>
+  <div class="panel"><strong>Privacy</strong><p class="lead" style="margin:8px 0 0">動画ファイルはこのページ内のブラウザ処理で確認し、外部サーバーへアップロードしません。</p></div>
+</section>
+
+<div class="steps">
+  <div class="step"><b>01 — SELECT</b><p>確認したい動画ファイルを選択します。</p></div>
   <div class="step"><b>02 — CHECK</b><p>解像度・長さ・ファイル形式などを確認します。</p></div>
-  <div class="step"><b>03 — SAVE</b><p>元データを変換せずに端末へ保存します。</p></div>
- </div>
+  <div class="step"><b>03 — SAVE</b><p>必要なら元データを変換せずに端末へ保存します。</p></div>
+</div>
 </main>
-<footer>clipflow. &nbsp;·&nbsp; Your video stays on your device</footer>
+<footer>GV method. &nbsp;·&nbsp; Your video stays on your device</footer>
+
 <script>
+const drawer=document.getElementById('drawer'),backdrop=document.getElementById('backdrop'),menuOpen=document.getElementById('menuOpen');
+function openMenu(){drawer.classList.add('open');backdrop.classList.add('open');menuOpen.setAttribute('aria-expanded','true')}
+function closeMenu(){drawer.classList.remove('open');backdrop.classList.remove('open');menuOpen.setAttribute('aria-expanded','false')}
+menuOpen.addEventListener('click',openMenu);document.getElementById('menuClose').addEventListener('click',closeMenu);backdrop.addEventListener('click',closeMenu);
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const page=document.getElementById('page-'+name);if(page)page.classList.add('active');closeMenu();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-page]').forEach(el=>el.addEventListener('click',()=>showPage(el.dataset.page)));
 const input=document.getElementById('file'),drop=document.getElementById('drop'),card=document.getElementById('fileCard'),details=document.getElementById('details'),video=document.getElementById('thumb');
 let currentFile=null,objectUrl=null;
 const fmtBytes=n=>n<1024*1024?(n/1024).toFixed(1)+' KB':(n/1024/1024).toFixed(2)+' MB';
 const fmtTime=s=>{if(!Number.isFinite(s))return '—';const m=Math.floor(s/60),sec=Math.floor(s%60);return `${m}:${String(sec).padStart(2,'0')}`};
 function loadFile(file){
- if(!file)return;
- if(!file.type.startsWith('video/')){alert('動画ファイルを選択してください。');return}
+ if(!file)return;if(!file.type.startsWith('video/')){alert('動画ファイルを選択してください。');return}
  currentFile=file;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(file);video.src=objectUrl;
- document.getElementById('filename').textContent=file.name;
- document.getElementById('filesub').textContent=fmtBytes(file.size)+' · '+(file.type||'形式不明');
+ document.getElementById('filename').textContent=file.name;document.getElementById('filesub').textContent=fmtBytes(file.size)+' · '+(file.type||'形式不明');
  card.style.display='flex';drop.style.display='none';details.style.display='block';
- document.getElementById('size').textContent=fmtBytes(file.size);
- document.getElementById('format').textContent=(file.type.split('/')[1]||'不明').toUpperCase();
- document.getElementById('message').textContent='';
- video.onloadedmetadata=()=>{
-  const w=video.videoWidth,h=video.videoHeight;
-  document.getElementById('resolution').textContent=w+' × '+h;
-  document.getElementById('duration').textContent=fmtTime(video.duration);
-  const gcd=(a,b)=>b?gcd(b,a%b):a;const d=gcd(w,h);
-  document.getElementById('ratio').textContent=(w/d)+':'+(h/d)+(h>w?' · 縦':'');
-  document.getElementById('state').textContent='確認済み';
- };
+ document.getElementById('size').textContent=fmtBytes(file.size);document.getElementById('format').textContent=(file.type.split('/')[1]||'不明').toUpperCase();document.getElementById('message').textContent='';document.getElementById('fps').textContent='未取得';
+ video.onloadedmetadata=()=>{const w=video.videoWidth,h=video.videoHeight;document.getElementById('resolution').textContent=w+' × '+h;document.getElementById('duration').textContent=fmtTime(video.duration);const gcd=(a,b)=>b?gcd(b,a%b):a;const d=gcd(w,h);document.getElementById('ratio').textContent=(w/d)+':'+(h/d)+(h>w?' · 縦':'')};
+ showPage('upload');
 }
-function reset(){currentFile=null;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=null;video.removeAttribute('src');video.load();input.value='';card.style.display='none';details.style.display='none';drop.style.display='flex';}
+function reset(){currentFile=null;if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=null;video.removeAttribute('src');video.load();input.value='';card.style.display='none';details.style.display='none';drop.style.display='flex'}
 input.addEventListener('change',e=>loadFile(e.target.files[0]));
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
-document.getElementById('remove').onclick=reset;
-document.getElementById('change').onclick=()=>input.click();
-document.getElementById('save').onclick=()=>{
- if(!currentFile)return;const a=document.createElement('a');const url=URL.createObjectURL(currentFile);a.href=url;a.download=currentFile.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
- document.getElementById('message').textContent='元動画の保存を開始しました。';
-};
+document.getElementById('remove').onclick=reset;document.getElementById('change').onclick=()=>input.click();
+document.getElementById('save').onclick=()=>{if(!currentFile)return;const a=document.createElement('a'),url=URL.createObjectURL(currentFile);a.href=url;a.download=currentFile.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);document.getElementById('message').textContent='元動画の保存を開始しました。'};
+document.getElementById('checkUrl').addEventListener('click',()=>{const value=document.getElementById('tiktokUrl').value.trim(),msg=document.getElementById('urlMessage');let u;try{u=new URL(value)}catch(e){msg.textContent='有効なURLを入力してください。';msg.style.color='#b42318';return}if(!/(^|\.)tiktok\.com$/i.test(u.hostname)){msg.textContent='TikTokのURLを入力してください。';msg.style.color='#b42318';return}msg.textContent='TikTok URLを確認しました。ただし、このサイト単体では動画データにアクセスしてFPSを取得できません。動画ファイルを使って確認してください。';msg.style.color='var(--green)'});
+
+// Pixel upscaler: canvas-based resolution enlargement (not AI enhancement).
+const upInput=document.getElementById('upFile');
+const upInfo=document.getElementById('upInfo');
+const scaleInfo=document.getElementById('scaleInfo');
+const startUpscale=document.getElementById('startUpscale');
+const upProgress=document.getElementById('upProgress');
+const upDownload=document.getElementById('upDownload');
+let upVideo=null,upUrl=null,selectedLongEdge=1080;
+document.querySelectorAll('.scale-choice').forEach(btn=>btn.addEventListener('click',()=>{
+ selectedLongEdge=Number(btn.dataset.scale);
+ document.querySelectorAll('.scale-choice').forEach(b=>b.style.background=b===btn?'#17191d':'#f0f2f4');
+ document.querySelectorAll('.scale-choice').forEach(b=>b.style.color=b===btn?'#fff':'#25282d');
+ updateScaleInfo();
+}));
+function updateScaleInfo(){
+ if(!upVideo||!upVideo.videoWidth){scaleInfo.textContent='出力サイズ：動画を選択してください';return}
+ const w=upVideo.videoWidth,h=upVideo.videoHeight,long=Math.max(w,h),factor=selectedLongEdge/long;
+ scaleInfo.textContent=`出力サイズ：約 ${Math.round(w*factor)} × ${Math.round(h*factor)} px`;
+}
+upInput?.addEventListener('change',()=>{
+ const f=upInput.files?.[0];if(!f)return;
+ if(!f.type.startsWith('video/')){upInfo.textContent='動画ファイルを選択してください。';return}
+ if(upUrl)URL.revokeObjectURL(upUrl);
+ upUrl=URL.createObjectURL(f);upVideo=document.createElement('video');
+ upVideo.src=upUrl;upVideo.muted=true;upVideo.playsInline=true;upVideo.preload='metadata';
+ upVideo.onloadedmetadata=()=>{
+  upInfo.textContent=`${f.name} · ${upVideo.videoWidth} × ${upVideo.videoHeight} px · ${fmtTime(upVideo.duration)}`;
+  startUpscale.disabled=false;updateScaleInfo();
+ };
+ upVideo.onerror=()=>{upInfo.textContent='この動画をブラウザで読み込めませんでした。別の動画を試してください。';startUpscale.disabled=true};
+ upDownload.style.display='none';upProgress.textContent='出力サイズを選んでください。';
+});
+startUpscale?.addEventListener('click',async()=>{
+ if(!upVideo||!upVideo.videoWidth)return;
+ const source=upVideo, f=upInput.files[0], w=source.videoWidth,h=source.videoHeight;
+ const factor=selectedLongEdge/Math.max(w,h),outW=Math.max(2,Math.round(w*factor/2)*2),outH=Math.max(2,Math.round(h*factor/2)*2);
+ const canvas=document.createElement('canvas');canvas.width=outW;canvas.height=outH;
+ const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+ const stream=canvas.captureStream(30);
+ let recorder;
+ const mime=['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'].find(t=>MediaRecorder.isTypeSupported(t));
+ if(!mime){upProgress.textContent='このブラウザはWebM書き出しに対応していません。';return}
+ try{
+  // Include original audio when captureStream is available.
+  if(source.captureStream){const original=source.captureStream();original.getAudioTracks().forEach(t=>stream.addTrack(t))}
+  const chunks=[];recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:Math.max(5_000_000,Math.min(20_000_000,outW*outH*3))});
+  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  recorder.onstop=()=>{
+   const blob=new Blob(chunks,{type:mime});const url=URL.createObjectURL(blob);
+   upDownload.href=url;upDownload.download=(f.name.replace(/\.[^.]+$/,'')||'video')+'-upscaled.webm';upDownload.style.display='inline-block';
+   upProgress.textContent=`完了：${outW} × ${outH} px のWebMを書き出しました。`;
+   stream.getTracks().forEach(t=>t.stop());
+  };
+  await source.play();recorder.start(250);startUpscale.disabled=true;
+  const draw=()=>{
+   if(source.ended||source.paused){if(recorder.state==='recording')recorder.stop();startUpscale.disabled=false;return}
+   ctx.drawImage(source,0,0,outW,outH);
+   upProgress.textContent=`処理中… ${fmtTime(source.currentTime)} / ${fmtTime(source.duration)}`;
+   requestAnimationFrame(draw);
+  };
+  source.currentTime=0;source.onended=()=>{if(recorder.state==='recording')recorder.stop();startUpscale.disabled=false};
+  draw();
+ }catch(err){if(recorder&&recorder.state==='recording')recorder.stop();startUpscale.disabled=false;upProgress.textContent='書き出しを開始できませんでした。この端末・ブラウザでは非対応の可能性があります。'}
+});
+
 </script>
 </body>
 </html>
